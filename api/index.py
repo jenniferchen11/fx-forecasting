@@ -16,8 +16,14 @@ def get_forex_rates():
     to_currency = request.args.get('to')
 
     historical_rates = get_historical_rates(from_currency, to_currency)
+    current_rate = get_current_rate(from_currency, to_currency)
 
-    return jsonify({"historical_rates": historical_rates})
+    res = {
+        "historical_rates": historical_rates,
+        "current_rate": current_rate
+    }
+
+    return jsonify(res)
 
 
 if __name__ == '__main__':

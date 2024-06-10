@@ -27,7 +27,7 @@ def get_historical_rates(from_currency, to_currency):
     url = f'{AV_HISTORICAL_RATES_PATH}from_symbol={from_currency}&to_symbol={to_currency}&apikey={AV_API_KEY}'
     res = requests.get(url)
     data = res.json()
-
+    print(data)
     daily_rates = data['Time Series FX (Daily)']
 
     daily_avgs = {}

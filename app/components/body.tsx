@@ -27,23 +27,13 @@ interface RequestData {
     to: string;
 }
 
-interface HistoricalData {
-    labels: string[];
-    datasets: {
-      label: string;
-      data: number[];
-      fill: boolean;
-      borderColor: string;
-      tension: number;
-    }[];
-  }
-
 export default function Body(){
     const options: string[] = ['AUD', 'CAD']
 
     const [fromOption, setFromOption] = useState<string>(options[0]);
     const [toOption, setToOption] = useState<string>(options[0]);
-    const [responseData, setResponse] = useState<ChartData<'line'> | null>(null);
+    const [historicalData, setHistoricalData] = useState<ChartData<'line'> | null>(null);
+    const [currentData, setCurrentData] = useState<number | null>(null);
     const [message, setMessage] = useState<string>("Please select currencies and click 'Get Rates' to obtain results.");
 
     const handleFromSelect = (selectedOption: string) => {
@@ -96,7 +86,11 @@ export default function Body(){
                   }
                 ]
             };
-            setResponse(lineChartData);
+            setHistoricalData(lineChartData);
+
+            const currentRate = res.data['current_rate'];
+            console.log(currentRate);
+            setCurrentData(currentRate);
         
         } catch (error) {
             console.error('Error:', error);
@@ -115,8 +109,9 @@ export default function Body(){
                 </form>
             </div>
             <Spacer/>
-            {responseData ? (
-                <Line data={responseData} />
+            {currentData !== null && <p> Current exchange rate: {currentData}</p>}
+            {historicalData ? (
+                <Line data={historicalData} />
             ) : (
                 <p>{message}</p>
             )}
