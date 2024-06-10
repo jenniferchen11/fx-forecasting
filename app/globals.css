@@ -36,7 +36,7 @@ body {
 
 .page-title {
   color: rgb(76, 75, 75);
-  font-size: 60px;
+  font-size: 100px;
   font-family: 'Tahoma', 'sans-serif';
 }
 
@@ -96,4 +96,8 @@ body {
   .title-background::before {
     height: 360px;
   }
+}
+
+.spacer {
+  margin-bottom: 200px; /* Adjust the value as needed */
 }
