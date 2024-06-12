@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .custom-width-80 {
+    width: 80px;
+  }
+
+  .custom-width-100 {
+    width: 100px;
+  }
+
+}
+
+.dropdown-label {
+    font-family: 'Tahoma', 'sans-serif';
+    font-size: 18px;
+    color: rgb(92, 52, 13);
+}
+
+.submit-button {
+    background-color: white;
+    color:rgb(92, 52, 13);
+    padding: 8px 20px;
+    border-radius: 5px;
+    border: 2px solid #5c340d;
+    cursor: pointer;
+    font-family: 'Tahoma';
+    font-size: 17px;
+}
+
+.message {
+    font-family: 'Tahoma', 'sans-serif';
+    font-size: 18px;
+    text-align: center;
+    color: rgb(92, 52, 13);
+}
+
+.message-large {
+    font-family: 'Tahoma', 'sans-serif';
+    font-size: 24px;
+    text-align: center;
+    color: rgb(92, 52, 13);
+}
+
+.chart-container {
+    width: 100%;
+}
+
+.chart-container canvas {
+    width: 100% !important;
+    max-width: 100%;
+}

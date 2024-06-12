@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "ForEx Rates & Forecast",
+  title: "Foreign Exchange Rates & Forecast",
   description: "Get foreign exchange rates and predictions",
 };
 
