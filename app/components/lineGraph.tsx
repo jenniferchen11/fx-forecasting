@@ -34,7 +34,7 @@ interface LineGraphProps {
 const LineGraph: React.FC<LineGraphProps> = ({ res, performForecast, fromOption, toOption, isLoading }) => {
     const [lineGraphData, setLineGraphData] = useState<ChartData<'line'> | null>(null);
     const [currentRate, setCurrentRate] = useState<number | null>(null);
-    const [chartOptions, setChartOptions] = useState<ChartOptions | null>(null);
+    const [chartOptions, setChartOptions] = useState<ChartOptions<'line'> | null>(null);
     const [message, setMessage] = useState<string>("");
     const [displayedFrom, setDisplayedFrom] = useState<string | null>("");
     const [displayedTo, setDisplayedTo] = useState<string | null>("");
@@ -61,7 +61,7 @@ const LineGraph: React.FC<LineGraphProps> = ({ res, performForecast, fromOption,
             setMessage("");
         }
 
-        const chartOptions: ChartOptions = {
+        const chartOptions: ChartOptions<'line'> = {
             plugins: {
                 legend: {
                     display: performForecast,
