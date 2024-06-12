@@ -1,14 +1,17 @@
 "use client";
 
+import "./components.css";
+
 import React, { useState } from 'react';
 
 interface DropdownProps {
     options: string[];
-    onSelect: (option: string) => void;
+    defaultOption: string;
+    onSelect: (option: string | null) => void;
   }
 
-const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+const Dropdown: React.FC<DropdownProps> = ({ options, defaultOption, onSelect}) => {
+  const [selectedOption, setSelectedOption] = useState<string>(defaultOption);
   const [isOpen, setIsOpen] = useState(false);
 
   function handleOptionClick(option: string) {
@@ -18,7 +21,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, onSelect }) => {
   }
 
   return (
-    <div className="relative inline-block w-64">
+    <div className={`relative inline-block`}>
       <button
         className="bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded inline-flex items-center w-full"
         onClick={() => setIsOpen(!isOpen)}

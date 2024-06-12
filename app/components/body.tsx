@@ -1,124 +1,118 @@
 "use client";
 
-import { useState } from 'react';
-import axios from 'axios';
-import Dropdown from './dropdown'
+import "./components.css";
 
-import { Line } from 'react-chartjs-2';
-import { ChartData } from 'chart.js';
+import axios, { AxiosResponse } from 'axios';
 
+import Dropdown from './dropdown';
+import { FadeLoader } from 'react-spinners';
+import LineGraph from './lineGraph';
 import Spacer from './spacer'
-
-import {
-    Chart as ChartJS,
-    LineController,
-    LineElement,
-    PointElement,
-    LinearScale,
-    Title,
-    CategoryScale
-} from 'chart.js';
-
-// register the required components with Chart.js
-ChartJS.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale);
+import currencyNames from "./constants";
+import { useState } from 'react';
 
 interface RequestData {
     from: string;
     to: string;
+    performForecast: boolean;
 }
 
+const formattedCurrencies: string[] = Object.keys(currencyNames).map(key => {
+    return `${key} (${currencyNames[key]})`;
+});
+
 export default function Body(){
-    const options: string[] = ['AUD', 'CAD']
+    const [fromOption, setFromOption] = useState<string>("CAD");
+    const [toOption, setToOption] = useState<string>("USD");
+    const [message, setMessage] = useState<string>("Please select currencies and click Submit");
+    const [performForecast, setPerformForecast] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [response, setResponse] = useState<AxiosResponse<any, any> | null>(null);
 
-    const [fromOption, setFromOption] = useState<string>(options[0]);
-    const [toOption, setToOption] = useState<string>(options[0]);
-    const [historicalData, setHistoricalData] = useState<ChartData<'line'> | null>(null);
-    const [currentData, setCurrentData] = useState<number | null>(null);
-    const [message, setMessage] = useState<string>("Please select currencies and click 'Get Rates' to obtain results.");
+    const handleForecastSelect = (selectedOption: string | null) => {
+        if(selectedOption == null){
+            setPerformForecast(false);
+        } else if(selectedOption == "Yes"){
+            setPerformForecast(true);
+        } else{
+            setPerformForecast(false);
+        }
+    };
 
-    const handleFromSelect = (selectedOption: string) => {
-        setFromOption(selectedOption);
+    const handleFromSelect = (selectedOption: string | null) => {
+        if(selectedOption != null){
+            setFromOption(selectedOption.slice(0, 3));
+        } else {
+            setFromOption("Select");
+        }
     };
-    const handleToSelect = (selectedOption: string) => {
-        setToOption(selectedOption);
+
+    const handleToSelect = (selectedOption: string | null) => {
+        if(selectedOption != null){
+            setToOption(selectedOption.slice(0, 3));
+        } else {
+            setToOption("Select");
+        }
     };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log("submitted");
 
         if (fromOption == toOption){
-            setMessage(" 'From' and 'To' currencies must be different.");
+            setMessage("NOTE: 'From' and 'To' currencies must be different");
             return;
-        } else{
-            setMessage("");
-        }
+        } 
+        setIsLoading(true);
+        setMessage("")
+        
         const request_data: RequestData = {
             from: fromOption,
-            to: toOption
+            to: toOption,
+            performForecast: performForecast
         }
-
         const apiUrl: string = process.env.NEXT_PUBLIC_API_URL!;
         
         try {
-            
-            const res = await axios.get(apiUrl, {params: request_data});
-            
-            const historicalRates = res.data['historical_rates']
-
-            const labels = Object.keys(historicalRates).sort()
-            let rates = [];
-
-            for(let i = 0; i < labels.length; i++){
-                rates.push(historicalRates[labels[i]])
-            }
-            console.log(labels)
-            console.log(rates)
-
-            const lineChartData: ChartData<"line"> = {
-                labels: labels,
-                datasets: [
-                  {
-                    label: 'Historical ForEx Rates',
-                    data: rates,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                  }
-                ]
-            };
-            setHistoricalData(lineChartData);
-
-            const currentRate = res.data['current_rate'];
-            console.log(currentRate);
-            setCurrentData(currentRate);
-        
+            const res: AxiosResponse<any, any> = await axios.get(apiUrl, {params: request_data});
+            setResponse(res);
         } catch (error) {
-            console.error('Error:', error);
+            if (axios.isAxiosError(error)) {
+                const errMsg = error.response!.data["error_message"]!;
+                setMessage(errMsg);
+            } else{
+                setMessage(String(error));
+            } 
         }
-    }
+        setIsLoading(false);
+    };
 
     return(
         <div>
             <div className="flex items-center space-x-4">
-                <p>From:</p>
-                <Dropdown options={options} onSelect={handleFromSelect} />
-                <p>To:</p>
-                <Dropdown options={options} onSelect={handleToSelect} />
+                <p className="dropdown-label"> From: </p>
+                <Dropdown options={formattedCurrencies} defaultOption="CAD (Canadian Dollar)" onSelect={handleFromSelect} />
+                <p className="dropdown-label"> To: </p>
+                <Dropdown options={formattedCurrencies} defaultOption="USD (United States Dollar)" onSelect={handleToSelect} />
+                <p className="dropdown-label"> Forecast next 14 days: </p>
+                <Dropdown options={['No', 'Yes']} defaultOption="No" onSelect={handleForecastSelect} />
                 <form onSubmit={handleSubmit}>
-                    <button type="submit">Get Rates</button>
+                    <button className="submit-button" type="submit">
+                        Submit
+                    </button>
                 </form>
             </div>
             <Spacer/>
-            {currentData !== null && <p> Current exchange rate: {currentData}</p>}
-            {historicalData ? (
-                <Line data={historicalData} />
-            ) : (
-                <p>{message}</p>
-            )}
+            <p className="message">{message}</p>
+            <LineGraph res={response} performForecast={performForecast} fromOption={fromOption} toOption={toOption} isLoading={isLoading}/>
+            {isLoading && 
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <FadeLoader color={'#705642'} loading={isLoading} radius={50} />
+                </div>
+            }
         </div>
     )
-
 }
+
 
 
 
