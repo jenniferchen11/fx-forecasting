@@ -76,19 +76,14 @@ export default function Body(){
             const res: AxiosResponse<any, any> = await axios.get(apiUrl, {params: request_data});
             setResponse(res);
         } catch (error) {
-            if (axios.isAxiosError(error)) {
-                const errMsg = error.response!.data["error_message"]!;
-                setMessage(errMsg);
-            } else{
-                setMessage(String(error));
-            } 
+            console.log(error);
         }
         setIsLoading(false);
     };
 
     return(
         <div>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-4 justify-center">
                 <p className="dropdown-label"> From: </p>
                 <Dropdown options={formattedCurrencies} defaultOption="CAD (Canadian Dollar)" onSelect={handleFromSelect} />
                 <p className="dropdown-label"> To: </p>

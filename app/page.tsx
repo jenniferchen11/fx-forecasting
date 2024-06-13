@@ -12,7 +12,7 @@ export default function Home() {
         </p>
       </div>
       <Spacer height={'20rem'}/>
-      <div>
+      <div style={{ width: '80vw' }}>
         <Body/>
       </div>
     </main>
