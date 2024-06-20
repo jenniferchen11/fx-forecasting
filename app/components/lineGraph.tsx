@@ -18,7 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import { ChartData } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import Spacer from './spacer'
+import Spacer from './spacer';
 
 // register the required components with Chart.js
 ChartJS.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, Legend);
@@ -109,7 +109,7 @@ const LineGraph: React.FC<LineGraphProps> = ({ res, performForecast, fromOption,
 
   return (
     <div>
-        <p className="message" style={{ textAlign: 'left' }}>{message}</p>
+        <p className="graph-message">{message}</p>
         <Spacer/>
         {currentRate !== null && 
         <p className="message-large"> 

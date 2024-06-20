@@ -1,7 +1,7 @@
 import "./globals.css";
 
-import Body from './components/body'
-import Spacer from './components/spacer'
+import Body from './components/body';
+import Spacer from './components/spacer';
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
         </p>
       </div>
       <Spacer height={'20rem'}/>
-      <div style={{ width: '80vw' }}>
+      <div className="w-[80vw]">
         <Body/>
       </div>
     </main>

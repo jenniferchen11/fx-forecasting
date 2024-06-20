@@ -4,12 +4,12 @@ import "./components.css";
 
 import axios, { AxiosResponse } from 'axios';
 
-import Dropdown from './dropdown';
-import { FadeLoader } from 'react-spinners';
-import LineGraph from './lineGraph';
-import Spacer from './spacer'
-import currencyNames from "./constants";
 import { useState } from 'react';
+import { FadeLoader } from 'react-spinners';
+import currencyNames from "./constants";
+import Dropdown from './dropdown';
+import LineGraph from './lineGraph';
+import Spacer from './spacer';
 
 interface RequestData {
     from: string;
@@ -100,7 +100,7 @@ export default function Body(){
             <p className="message">{message}</p>
             <LineGraph res={response} performForecast={performForecast} fromOption={fromOption} toOption={toOption} isLoading={isLoading}/>
             {isLoading && 
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div className="flex justify-center items-center">
                     <FadeLoader color={'#705642'} loading={isLoading} radius={50} />
                 </div>
             }
