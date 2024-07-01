@@ -3,6 +3,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 ## About
 
 Foreign exchange rate forecaster, providing 14-day bilateral currency rate predictions for ~10 currencies. 
+<img width="1630" alt="fx_forecast_demo_pic" src="https://github.com/jenniferchen11/fx-forecasting/assets/33589920/434b669f-8a9e-4644-be25-46991ef84a6b">
 
 ### Frontend
 - Built using Next.js and Tailwind CSS
